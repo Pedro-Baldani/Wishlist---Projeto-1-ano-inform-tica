@@ -2,26 +2,42 @@ nomes = []
 precos = []
 prioridades = []
 comprados = []
+numeracao = []
 
 def adicionar():
     # FIXME: colocar validação
-    nome = input("Digite o nome do jogo: ")
+    nome = input("Digite o nome do jogo: ") .title()
     preco = float(input("Digite o preco do jogo: "))
-    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .strip()
+    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .title() .strip()
+
+    nomes.append(nome)
+    precos.append(preco)
+    prioridades.append(prioridade)
+    comprados.append(False)
+    for i in range(len(nomes)):
+        numeracao.append(i + 1) #conserta félix
+
+
+def listar():
+    if nomes: 
+        for i in range(len(nomes)):
+            print(f"{numeracao[i]} - Nome: {nomes[i]}" + f" - Preço:  {precos[i]}" + f" - Prioridade:  {prioridades[i]}" + f" - Já foi comprado? {comprados[i]}")
+
+def atualizar():
+    numeracao = print(input("Qual o item que deseja atualizar? "))
+    nome = input("Digite o nome do jogo: ") .title()
+    preco = float(input("Digite o preco do jogo: "))
+    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .title() .strip()
 
     nomes.append(nome)
     precos.append(preco)
     prioridades.append(prioridade)
     comprados.append(False)
 
-
-def listar():
-    if nomes: 
-        for i in range(len(nomes)):
-            print(f"Nome: {nomes[i]}" + f" - Preço:  {precos[i]}" + f" - Prioridade:  {prioridade[i]}")
-
-
-
+def sair():
+    while True:
+        print("Saindo...")
+        break
 
 def menu():
     print("=" * 20)
@@ -29,51 +45,40 @@ def menu():
     print()
     print("1. Adicionar item")
     print("2. Ver lista")
-    print("3. Remover item")
-    print("4. Limpar lista")
-    print("5. atualizar lista")
+    print("3. Atualizar lista")
+    print("4. Remover item")
+    print("5. Limpar lista")
     print("0. Sair")
     print("=" * 20)
 
 
 def main():
     while True:
-        menu()
+         menu()
 
-        # TODO: colocar validação de entrada
-        op = int(input("Escolha uma opção: "))
-        if op < 0 or op > 4:
-            print("Opção inválida. Tente novamente.")
+         # TODO: colocar validação de entrada
+         op = int(input("Escolha uma opção: "))
+         if op < 0 or op > 5:
+              print("Opção inválida. Tente novamente.")
 
-        match op:
+         match op:
             case 1:
                 adicionar()
 
             case 2:
-              listar()
-                
+                listar()
+                    
             case 3:
-                pass 
+                atualizar()
 
             case 4:
-                confirmaçao_4 = input(
-                    "Deseja limpar a lista? (s/n): ").lower() .strip()
-                if confirmaçao_4 == "s":
-                    print("Lista limpa com sucesso!")
-                else:
-                    print("Limpeza cancelada.")
+                pass
 
-                if jogos:
-                    jogos.clear()
-                    print("Lista limpa com sucesso!")
-                else:
-                    print("A lista de desejos já está vazia.")
-
+            case 5:
+                pass
+            
             case 0:
-                while True:
-                    print("Saindo...")
-                    break
-
-
+                sair()
+            
 if __name__ == "__main__":
     main()
