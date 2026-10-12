@@ -4,10 +4,10 @@ prioridades = []
 comprados = []
 
 def adicionar():
-    # FIXME: colocar validação de nome
+    # FIXME: colocar validação
     nome = input("Digite o nome do jogo: ")
     preco = float(input("Digite o preco do jogo: "))
-    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta]"))
+    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .strip()
 
     nomes.append(nome)
     precos.append(preco)
@@ -77,5 +77,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-              
