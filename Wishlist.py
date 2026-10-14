@@ -25,6 +25,7 @@ def adicionar():
     prioridades.append(prioridade)
     comprados.append(False)
     numeracoes.append(len(nomes))
+    print("Jogo adicionado com sucesso!")
 
 def listar():
     if nomes: 
@@ -38,6 +39,7 @@ def atualizar():
     nome2 = input("Digite o nome do jogo: ").title()
     preco2 = float(input("Digite o preco do jogo: "))
     prioridade2 = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+    comprados2 = input("O item já foi comprado? [s/n]: ").strip().lower()
     if prioridade2 < 1 or prioridade2 > 3:
         print("Valor inválido, tente novamente")
         return adicionar()
@@ -55,6 +57,7 @@ def atualizar():
             nomes[i] = nome2
             precos[i] = preco2
             prioridades[i] = prioridade2
+            comprados[i] = comprados2 == "s"
             break
 
 def remover():
