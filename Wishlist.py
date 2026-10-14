@@ -2,37 +2,78 @@ nomes = []
 precos = []
 prioridades = []
 comprados = []
-numeracao = []
+numeracoes = []
 
 def adicionar():
     # FIXME: colocar validação
-    nome = input("Digite o nome do jogo: ") .title()
+    nome = input("Digite o nome do jogo: ").title()
     preco = float(input("Digite o preco do jogo: "))
-    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .title() .strip()
+    prioridade = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+    if prioridade < 1 or prioridade > 3:
+        print("Valor inválido, tente novamente")
+        return adicionar()
+    match prioridade:
+        case 1:
+            prioridade = "Baixa"
+        case 2:
+            prioridade = "Média"
+        case 3:
+            prioridade = "Alta"
 
     nomes.append(nome)
     precos.append(preco)
     prioridades.append(prioridade)
     comprados.append(False)
-    for i in range(len(nomes)):
-        numeracao.append(i + 1) #conserta félix
-
+    numeracoes.append(len(nomes))
 
 def listar():
     if nomes: 
         for i in range(len(nomes)):
-            print(f"{numeracao[i]} - Nome: {nomes[i]}" + f" - Preço:  {precos[i]}" + f" - Prioridade:  {prioridades[i]}" + f" - Já foi comprado? {comprados[i]}")
+            print(f"{numeracoes[i]} - Nome: {nomes[i]}" + f" | Preço:  R${precos[i]}" + f" | Prioridade:  {prioridades[i]}" + f" | Já foi comprado? {comprados[i]}")
+    else:
+        print("Lista vazia, tente novamente.")
 
 def atualizar():
-    numeracao = print(input("Qual o item que deseja atualizar? "))
-    nome = input("Digite o nome do jogo: ") .title()
-    preco = float(input("Digite o preco do jogo: "))
-    prioridade = (input("Qual a prioridade da compra? [Baixa / Média / Alta] ")) .title() .strip()
+    numeracao = int(input("Qual o item que deseja atualizar? "))
+    nome2 = input("Digite o nome do jogo: ").title()
+    preco2 = float(input("Digite o preco do jogo: "))
+    prioridade2 = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+    if prioridade2 < 1 or prioridade2 > 3:
+        print("Valor inválido, tente novamente")
+        return adicionar()
+        
+    match prioridade2:
+        case 1:
+            prioridade2 = "Baixa"
+        case 2:
+            prioridade2 = "Média"
+        case 3:
+            prioridade2 = "Alta"
 
-    nomes.append(nome)
-    precos.append(preco)
-    prioridades.append(prioridade)
-    comprados.append(False)
+    for i in range(len(numeracoes)):
+        if numeracoes[i] == numeracao:
+            nomes[i] = nome2
+            precos[i] = preco2
+            prioridades[i] = prioridade2
+            break
+
+def remover():
+    numeracao = int(input("Qual o item que deseja remover? ")) 
+    confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
+    if confirmacao == "n":
+        print("Operação cancelada.")
+        return remover()
+    else:
+        for i in range(len(numeracoes)):
+            if numeracoes[i] == numeracao:
+                nomes.remove(nomes[i])
+                precos.remove(precos[i])
+                prioridades.remove(prioridades[i])
+                comprados.remove(comprados[i])
+                numeracoes.remove(numeracoes[i])
+                break
+    print("Item removido com sucesso!")
+
 
 def sair():
     while True:
@@ -72,7 +113,7 @@ def main():
                 atualizar()
 
             case 4:
-                pass
+                remover()
 
             case 5:
                 pass
