@@ -12,11 +12,13 @@ def adicionar():
             prioridade = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
         except ValueError:
             print("Valor inválido, tente novamente")
+            print()
             continue
         break
         
     if prioridade < 1 or prioridade > 3:
         print("Valor inválido, por favor, digite um número de 1 a 3.")
+        print()
         return adicionar()
     match prioridade:
         case 1:
@@ -55,11 +57,13 @@ def atualizar():
                 comprados2 = input("O item já foi comprado? [s/n]: ").strip().lower()
             except ValueError:
                 print("Valor inválido, por favor, tente novamente.")
+                print()
                 continue
             break
 
         if prioridade2 < 1 or prioridade2 > 3:
             print("Valor inválido, por favor, digite um número de 1 a 3.")
+            print()
             return adicionar()
             
         match prioridade2:
@@ -71,6 +75,7 @@ def atualizar():
                 prioridade2 = "Alta"
         if comprados2 not in ["s", "n"]:
             print("Valor inválido, por favor, digite 's' para sim ou 'n' para não.")
+            print()
             return atualizar()
 
         for i in range(len(numeracoes)):
@@ -90,6 +95,7 @@ def remover():
                 numeracao = int(input("Qual o item que deseja remover? "))
             except ValueError:
                 print("Entrada inválida. Por favor, digite um número.")
+                print()
                 continue
             break
         confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
