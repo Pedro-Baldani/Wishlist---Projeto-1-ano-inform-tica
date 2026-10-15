@@ -5,12 +5,18 @@ comprados = []
 numeracoes = []
 
 def adicionar():
-    # FIXME: colocar validação
-    nome = input("Digite o nome do jogo: ").title()
-    preco = float(input("Digite o preco do jogo: "))
-    prioridade = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+    while True:
+        try:
+            nome = input("Digite o nome do jogo: ").title()
+            preco = float(input("Digite o preco do jogo: "))
+            prioridade = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+        except ValueError:
+            print("Valor inválido, tente novamente")
+            continue
+        break
+        
     if prioridade < 1 or prioridade > 3:
-        print("Valor inválido, tente novamente")
+        print("Valor inválido, por favor, digite um número de 1 a 3.")
         return adicionar()
     match prioridade:
         case 1:
@@ -30,53 +36,78 @@ def adicionar():
 def listar():
     if nomes: 
         for i in range(len(nomes)):
-            print(f"{numeracoes[i]} - Nome: {nomes[i]}" + f" | Preço:  R${precos[i]}" + f" | Prioridade:  {prioridades[i]}" + f" | Já foi comprado? {comprados[i]}")
+            if comprados[i] == True:
+                sim_ou_nao_comprados = "Sim"
+            else:
+                sim_ou_nao_comprados = "Não"
+            print(f"{numeracoes[i]} - Nome: {nomes[i]}" + f" | Preço:  R${precos[i]}" + f" | Prioridade:  {prioridades[i]}" + f" | Já foi comprado? {sim_ou_nao_comprados}")
     else:
-        print("Lista vazia, tente novamente.")
+        print("Lista vazia, tente adicionar um jogo primeiro!")
 
 def atualizar():
-    numeracao = int(input("Qual o item que deseja atualizar? "))
-    nome2 = input("Digite o nome do jogo: ").title()
-    preco2 = float(input("Digite o preco do jogo: "))
-    prioridade2 = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
-    comprados2 = input("O item já foi comprado? [s/n]: ").strip().lower()
-    if prioridade2 < 1 or prioridade2 > 3:
-        print("Valor inválido, tente novamente")
-        return adicionar()
-        
-    match prioridade2:
-        case 1:
-            prioridade2 = "Baixa"
-        case 2:
-            prioridade2 = "Média"
-        case 3:
-            prioridade2 = "Alta"
-
-    for i in range(len(numeracoes)):
-        if numeracoes[i] == numeracao:
-            nomes[i] = nome2
-            precos[i] = preco2
-            prioridades[i] = prioridade2
-            comprados[i] = comprados2 == "s"
+    if nomes:
+        while True:
+            try:
+                numeracao = int(input("Qual o item que deseja atualizar? "))
+                nome2 = input("Digite o nome do jogo: ").title()
+                preco2 = float(input("Digite o preco do jogo: "))
+                prioridade2 = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+                comprados2 = input("O item já foi comprado? [s/n]: ").strip().lower()
+            except ValueError:
+                print("Valor inválido, por favor, tente novamente.")
+                continue
             break
 
-def remover():
-    numeracao = int(input("Qual o item que deseja remover? ")) 
-    confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
-    if confirmacao == "n":
-        print("Operação cancelada.")
-        return remover()
-    else:
+        if prioridade2 < 1 or prioridade2 > 3:
+            print("Valor inválido, por favor, digite um número de 1 a 3.")
+            return adicionar()
+            
+        match prioridade2:
+            case 1:
+                prioridade2 = "Baixa"
+            case 2:
+                prioridade2 = "Média"
+            case 3:
+                prioridade2 = "Alta"
+        if comprados2 not in ["s", "n"]:
+            print("Valor inválido, por favor, digite 's' para sim ou 'n' para não.")
+            return atualizar()
+
         for i in range(len(numeracoes)):
             if numeracoes[i] == numeracao:
-                nomes.remove(nomes[i])
-                precos.remove(precos[i])
-                prioridades.remove(prioridades[i])
-                comprados.remove(comprados[i])
-                numeracoes.remove(numeracoes[i])
+                nomes[i] = nome2
+                precos[i] = preco2
+                prioridades[i] = prioridade2
+                comprados[i] = comprados2 == "s"
                 break
-    print("Item removido com sucesso!")
+    else:
+        print("Lista vazia, tente adicionar um jogo primeiro!")
 
+def remover():
+    if nomes:
+        while True:
+            try:
+                numeracao = int(input("Qual o item que deseja remover? "))
+            except ValueError:
+                print("Entrada inválida. Por favor, digite um número.")
+                continue
+            break
+        confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
+        if confirmacao not in ["s", "n"]:
+            print("Operação cancelada.")
+            return remover()
+        else:
+            for i in range(len(numeracoes)):
+                if numeracoes[i] == numeracao:
+                    nomes.remove(nomes[i])
+                    precos.remove(precos[i])
+                    prioridades.remove(prioridades[i])
+                    comprados.remove(comprados[i])
+                    numeracoes.remove(numeracoes[i])
+                    break
+        print("Item removido com sucesso!")
+    else:
+        print("Lista vazia, tente adicionar um jogo primeiro!")
 
 def sair():
     while True:
@@ -98,14 +129,16 @@ def menu():
 
 def main():
     while True:
-         menu()
+        menu()
+        try: 
+            op = int(input("Escolha uma opção: "))
+        except ValueError:
+            print("Entrada inválida. Por favor, digite um número de 0 a 5.")
+            return main()
+        if op < 0 or op > 5:
+            print("Opção inválida. Tente novamente.")
 
-         # TODO: colocar validação de entrada
-         op = int(input("Escolha uma opção: "))
-         if op < 0 or op > 5:
-              print("Opção inválida. Tente novamente.")
-
-         match op:
+        match op:
             case 1:
                 adicionar()
 
