@@ -7,17 +7,21 @@ numeracoes = []
 def adicionar():
     while True:
         try:
-            nome = input("Digite o nome do jogo: ").title()
-            preco = float(input("Digite o preco do jogo: "))
+            nome = input("Digite o nome do jogo: ").title().strip()
+            if not nome:
+                print("Digite um nome.")
+                print()
+                return adicionar()                
+            preco = float(input("Digite o preço do jogo: "))
             prioridade = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
         except ValueError:
-            print("Valor inválido, tente novamente")
+            print("Opção inválida. Por favor, tente novamente.")
             print()
             continue
         break
         
     if prioridade < 1 or prioridade > 3:
-        print("Valor inválido, por favor, digite um número de 1 a 3.")
+        print("Opção inválida. por favor, digite um número de 1 a 3.")
         print()
         return adicionar()
     match prioridade:
@@ -44,27 +48,34 @@ def listar():
                 sim_ou_nao_comprados = "Não"
             print(f"{numeracoes[i]} - Nome: {nomes[i]}" + f" | Preço:  R${precos[i]}" + f" | Prioridade:  {prioridades[i]}" + f" | Já foi comprado? {sim_ou_nao_comprados}")
     else:
-        print("Lista vazia, tente adicionar um jogo primeiro!")
+        print("Lista vazia. Tente adicionar um jogo primeiro!")
 
 def atualizar():
     if nomes:
         while True:
             try:
                 numeracao = int(input("Qual o item que deseja atualizar? "))
-                nome2 = input("Digite o nome do jogo: ").title()
-                preco2 = float(input("Digite o preco do jogo: "))
+                if numeracao not in numeracoes:
+                    print("Opção inválida. Por favor, digite o número de um item que esteja na lista.")
+                    print()
+                    return atualizar()
+                nome2 = input("Digite o nome do jogo: ").title().strip()
+                if not nome2:
+                    print("Digite um nome.")
+                    print()
+                    return adicionar()
+                preco2 = float(input("Digite o preço do jogo: "))
                 prioridade2 = int(input("Qual a prioridade da compra? [1: Baixa / 2: Média / 3: Alta]: "))
+                if prioridade2 < 1 or prioridade2 > 3:
+                    print("Opção inválida. Por favor, digite um número de 1 a 3.")
+                    print()
+                    return adicionar()
                 comprados2 = input("O item já foi comprado? [s/n]: ").strip().lower()
             except ValueError:
-                print("Valor inválido, por favor, tente novamente.")
+                print("Opção inválida. por favor, tente novamente.")
                 print()
                 continue
             break
-
-        if prioridade2 < 1 or prioridade2 > 3:
-            print("Valor inválido, por favor, digite um número de 1 a 3.")
-            print()
-            return adicionar()
             
         match prioridade2:
             case 1:
@@ -74,7 +85,7 @@ def atualizar():
             case 3:
                 prioridade2 = "Alta"
         if comprados2 not in ["s", "n"]:
-            print("Valor inválido, por favor, digite 's' para sim ou 'n' para não.")
+            print("Opção inválida. por favor, digite 's' para sim ou 'n' para não.")
             print()
             return atualizar()
 
@@ -86,7 +97,7 @@ def atualizar():
                 comprados[i] = comprados2 == "s"
                 break
     else:
-        print("Lista vazia, tente adicionar um jogo primeiro!")
+        print("Lista vazia. Tente adicionar um jogo primeiro!")
 
 def remover():
     if nomes:
@@ -94,15 +105,15 @@ def remover():
             try:
                 numeracao = int(input("Qual o item que deseja remover? "))
             except ValueError:
-                print("Entrada inválida. Por favor, digite um número.")
+                print("Opção inválida. Por favor, digite o número de um item que esteja na lista.")
                 print()
                 continue
             break
-        confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
-        if confirmacao not in ["s", "n"]:
-            print("Operação cancelada.")
+        if numeracao not in numeracoes:
+            print("Opção inválida. Por favor, digite o número de um item que esteja na lista.")
             return remover()
-        else:
+        confirmacao = input(f"Tem certeza que deseja remover o item {numeracao}? [s/n]: ").strip().lower()
+        if confirmacao == "s":
             for i in range(len(numeracoes)):
                 if numeracoes[i] == numeracao:
                     nomes.remove(nomes[i])
@@ -111,14 +122,16 @@ def remover():
                     comprados.remove(comprados[i])
                     numeracoes.remove(numeracoes[i])
                     break
-        print("Item removido com sucesso!")
+            print("Item removido com sucesso!")
+        elif confirmacao == "n":
+            print("Ação cancelada.")
+            return main()
+        else:
+            print("Opção inválida. Por favor, digite 's' para sim ou 'n' para não.")
+            print()
+            return remover()
     else:
-        print("Lista vazia, tente adicionar um jogo primeiro!")
-
-def sair():
-    while True:
-        print("Saindo...")
-        break
+        print("Lista vazia. Tente adicionar um jogo primeiro!")
 
 def menu():
     print("=" * 20)
@@ -128,8 +141,8 @@ def menu():
     print("2. Ver lista")
     print("3. Atualizar lista")
     print("4. Remover item")
-    print("5. Limpar lista")
-    print("0. Sair")
+    print("5. Limpar lista (Em construção)")
+    print("0. Sair (Em construção)")
     print("=" * 20)
 
 
@@ -139,10 +152,10 @@ def main():
         try: 
             op = int(input("Escolha uma opção: "))
         except ValueError:
-            print("Entrada inválida. Por favor, digite um número de 0 a 5.")
+            print("Opção inválida. Por favor, digite um número de 0 a 5.")
             return main()
         if op < 0 or op > 5:
-            print("Opção inválida. Tente novamente.")
+            print("Opção inválida. Por favor, digite um número de 0 a 5.")
 
         match op:
             case 1:
@@ -161,7 +174,7 @@ def main():
                 pass
             
             case 0:
-                sair()
+                pass
             
 if __name__ == "__main__":
     main()
